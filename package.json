@@ -1,0 +1,25 @@
+{
+  "name": "mysqlclient",
+  "version": "1.0.0",
+  "description": "client for mysql server",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "author": "kevin morfin",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.13.0",
+    "promise": "^8.0.1"
+  },
+  "devDependencies": {
+    "extend": "^3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-beautify": "^2.0.1",
+    "gulp-jasmine": "^2.4.2",
+    "gulp-jshint": "^2.0.4",
+    "gulp-watch": "^4.3.11",
+    "jasmine-reporters": "^2.2.1",
+    "jshint": "^2.9.5"
+  }
+}
