@@ -9,6 +9,7 @@
   "author": "kevin morfin",
   "license": "ISC",
   "dependencies": {
+    "config": "^1.26.1",
     "mysql": "^2.13.0",
     "promise": "^8.0.1"
   },
