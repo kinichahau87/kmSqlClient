@@ -1,29 +1,22 @@
 var gulp = require("gulp");
 var watch = require("gulp-watch");
-var jshint = require("gulp-jshint");
 var jasmine = require("gulp-jasmine");
 var jasmineReporters = require("jasmine-reporters");
 var beautify = require("gulp-beautify");
-var map = require('map-stream');
-var stylish = require('jshint-stylish');
 var eslint = require('gulp-eslint');
 
-var watchErrorReporter = map(function(file, cb){
-
-process.stdout.write("done with file " + file.path + "\n");
-});
 gulp.task("watch", function(){
-  return watch("src/*.js", {ignoreInitial: false})
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
-    .pipe(watchErrorReporter);
+  return gulp.watch("src/*.js", {ignoreInitial: false}, ["lint-easy"]);
+});
 
+gulp.task("lint-easy", function(){
+  return gulp.src("src/*.js")
+    .pipe(eslint())
+    .pipe(eslint.format());    
 });
 
 gulp.task("watch-test", function(){
-  return watch("spec/*.js", {ignoreInitial: false})
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+  return gulp.watch("spec/*.js", {ignoreInitial: false}, ["lint-easy"]);     
 });
 
 gulp.task("test-client", function(){

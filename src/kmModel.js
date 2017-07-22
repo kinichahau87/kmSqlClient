@@ -10,7 +10,7 @@ var KModel = function(args, __pool, tableName) {
 	if (args) {
 		for (var arg in args) {
 			this[arg] = args[arg];
-		}
+		} //end of for
 	} //end of if
 
 	if (typeof __pool === "undefined" || __pool == null) {
