@@ -4,11 +4,19 @@ var jshint = require("gulp-jshint");
 var jasmine = require("gulp-jasmine");
 var jasmineReporters = require("jasmine-reporters");
 var beautify = require("gulp-beautify");
+var map = require('map-stream');
+var stylish = require('jshint-stylish');
+var eslint = require('gulp-eslint');
 
+var watchErrorReporter = map(function(file, cb){
+
+process.stdout.write("done with file " + file.path + "\n");
+});
 gulp.task("watch", function(){
   return watch("src/*.js", {ignoreInitial: false})
     .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(jshint.reporter(stylish))
+    .pipe(watchErrorReporter);
 
 });
 
@@ -34,16 +42,31 @@ gulp.task("test-model", function(){
 
 gulp.task("lint", function(){
   return gulp.src("src/*.js")
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'))
-    .pipe(beautify({indent_size: 2}))
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+    .pipe(beautify({indent_size:4, indent_with_tabs:true}))
     .pipe(gulp.dest('./src/'));
 });
 
 gulp.task("spec-lint", function(){
   return gulp.src("spec/*.js")
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'))
-    .pipe(beautify({indent_size: 2}))
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+    .pipe(beautify({indent_size:4, indent_with_tabs:true}))
     .pipe(gulp.dest('./spec/'));
+});
+
+gulp.task("pretty-code", function(){
+	return gulp.src("src/*.js")
+		.pipe(beautify({indent_size:4, indent_with_tabs:true}))
+		.pipe(gulp.dest("./src/"));
+
+});
+
+gulp.task("pretty-test", function(){
+	return gulp.src("spec/*.js")
+	        .pipe(beautify({indent_size:4, indent_with_tabs:true}))
+		.pipe(gulp.dest("./spec/"));
 });

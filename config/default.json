@@ -1,6 +1,6 @@
 {
 	"dbConfig":{
-		"host":"127.0.0.1",
+		"host":"STOP-KMORFIN.STOPLLC.com",
 		"user":"NODEUSER",
 		"password":"somepass",
 		"dbName":"test"
