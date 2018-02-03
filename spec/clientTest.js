@@ -2,7 +2,7 @@ var client = require("../src/index");
 
 
 describe("A connection", function() {
-	var pleasework = new client.kmmysql({
+	var pleasework = new client({
 		connectionLimit: 20
 	});
 	pleasework.createConnection("10.103.2.52", "NODEUSER", "somepass", "test", function(err) {
@@ -171,7 +171,7 @@ describe("A connection", function() {
 					});
 					//should not connect with error
 					it("should not connect with error", function() {
-						var badConnection = new client.kmmysql();
+						var badConnection = new client();
 						badConnection.createConnection("localhost", "root", "S4t4dmin", "database_dont_exist", function(err) {
 							expect(err).not.toBe(null);
 						});

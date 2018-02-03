@@ -1,10 +1,11 @@
 var __mysql = require("mysql");
 
-var kmmysql = function(aOptions) {
+module.exports = (aOptions) => {
 	"use strict";
 
 	var mIsConnected = false;
 	var mPool = null;
+	var mNewConnection = null;
 	var mConnectionLimit = 10;
 
 	if (aOptions) {
@@ -13,7 +14,7 @@ var kmmysql = function(aOptions) {
 		}
 	}
 
-	this.createConnection = function(aHost, aUser, aPassword, aDatabase, aCallback) {
+	this.createConnection = (aHost, aUser, aPassword, aDatabase, aCallback) => {
 		try {
 			mPool = __mysql.createPool({
 				connectionLimit: mConnectionLimit,
@@ -30,21 +31,41 @@ var kmmysql = function(aOptions) {
 		}
 	}; //end of function
 
+	this.createNewConnection = (aHost, aUser, aPassword, aDatabase, aCallback) =>{
+		try {
+			mNewConnection = __mysql.createConnection({host: aHost, user: aUser, password: aPassword, database: aDatabase});
+			return aCallback(true);
+		} catch (e){
+			mNewConnection = null;
+			return aCallback(false, e);
+		}
+	};
 
-	this.query = function(aQuery, aValues, aCallback) {
-		mPool.getConnection(function(err, connection) {
-			if (err) {
-				return aCallback(err, null);
-			}
-			connection.query(aQuery, aValues, function(error, results) {
-				connection.release();
-				if (error) {
-					return aCallback(error, []);
+	this.query = (aQuery, aValues, aCallback) =>{
+		if (mNewConnection != null){
+			mNewConnection.connect();
+			mNewConnection.query(aQuery, aValues, (err, results) => {
+				mNewConnection.end();
+				if (err) {
+					return aCallback(err, []);
 				}
-				return aCallback(error, proccessResults(results));
+				return aCallback(err, proccessResults(results));
 			});
-		});
-	}; //end of function
+		} else {
+			mPool.getConnection((err, connection) => {
+				if (err) {
+					return aCallback(err, null);
+				}
+				connection.query(aQuery, aValues, (error, results) => {
+					connection.release();
+					if (error) {
+						return aCallback(error, []);
+					}
+					return aCallback(error, proccessResults(results));
+				});
+			});
+		}
+	};
 
 
 	function proccessResults(results) {
@@ -68,21 +89,21 @@ var kmmysql = function(aOptions) {
 	} //end of function
 
 
-	this.shutdown = function(aCallback) {
-		mPool.end(function(err) {
-			if (aCallback) {
-				return aCallback(err);
-			} else {
-				return err;
-			}
-		});
+	this.shutdown = (aCallback) => {
+		if (mPool != null){
+			mPool.end((err) => {
+				if (aCallback) {
+					return aCallback(err);
+				} else {
+					return err;
+				}
+			});
+		}
 	}; //end of function
 
-	this.IsConnected = function() {
+	this.IsConnected = () => {
 		return mIsConnected;
 	};
 
 	return this;
 }; //end of module
-
-module.exports.kmmysql = kmmysql;

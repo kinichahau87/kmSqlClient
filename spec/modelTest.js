@@ -1,5 +1,6 @@
 var __kmModel = require("../src/kmModel");
-var __poolClient = require("../src/dbManager").init("pool1");
+var trigTest = require("./models/trigtest");
+
 var executions = 0;
 describe("A model extension", function() {
 	beforeEach(function(done) {
@@ -10,11 +11,11 @@ describe("A model extension", function() {
 
 
 	it("should do simple query", function(done) {
-		var model = new __kmModel.KModel({
+		var model = new __kmModel({
 			"id": 0,
 			"message": "",
 			"client_name": ""
-		}, __poolClient);
+		});
 
 		model.setViewName("trigtest");
 		model.message = "hello world";
@@ -36,11 +37,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do where clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "",
-			"client_name": ""
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {
@@ -65,11 +62,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do where and clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "",
-			"client_name": ""
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {
@@ -97,11 +90,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do like clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "",
-			"client_name": ""
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {
@@ -126,11 +115,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do where and like clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "",
-			"client_name": ""
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {
@@ -158,11 +143,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do where and not like clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "",
-			"client_name": ""
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {
@@ -190,11 +171,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do insert", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "hello from test",
-			"client_name": "jasmine test"
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.create();
 
@@ -210,11 +187,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do update", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "hello from test",
-			"client_name": "jasmine test"
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		model.setId(1);
 
@@ -236,11 +209,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do delete", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "hello from test",
-			"client_name": "jasmine test"
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.del({
 			"client_name": {
@@ -260,9 +229,9 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do call", function(done) {
-		var model = new __kmModel.KModel({
+		var model = new __kmModel({
 			"aint": 1
-		}, __poolClient, "p");
+		}, "p");
 
 		var findPromise = model.callp();
 		findPromise.then(results => {
@@ -279,7 +248,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do call 2", function(done) {
-		var model = new __kmModel.KModel({}, __poolClient, "p2");
+		var model = new __kmModel({}, __poolClient, "p2");
 
 		var findPromise = model.callp();
 		findPromise.then(results => {
@@ -300,11 +269,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should not have empty table name", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "hello from test",
-			"client_name": "jasmine test"
-		}, __poolClient);
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find();
 
@@ -321,29 +286,25 @@ describe("A model extension", function() {
 		});
 	});
 
-	it("should have conneciton pool set", function(done) {
-		try {
-			var model = new __kmModel.KModel({
-				"id": 0,
-				"message": "hello from test",
-				"client_name": "jasmine test"
-			});
-			fail("should throw exception with: " + model);
-		} catch (error) {
-			executions++;
-
-			expect(error).not.toBe(null);
-			done();
-		}
-
-	});
+	// it("should have conneciton pool set", function(done) {
+	// 	try {
+	// 		var model = new __kmModel({
+	// 			"id": 0,
+	// 			"message": "hello from test",
+	// 			"client_name": "jasmine test"
+	// 		});
+	// 		fail("should throw exception with: " + model);
+	// 	} catch (error) {
+	// 		executions++;
+  //
+	// 		expect(error).not.toBe(null);
+	// 		done();
+	// 	}
+  //
+	// });
 
 	it("should not execute invalid clause", function(done) {
-		var model = new __kmModel.KModel({
-			"id": 0,
-			"message": "hello from test",
-			"client_name": "jasmine test"
-		}, __poolClient, "trigtest");
+		var model = new __kmModel(trigTest);
 
 		var findPromise = model.find({
 			"message": {

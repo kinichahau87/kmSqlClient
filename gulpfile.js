@@ -12,11 +12,12 @@ gulp.task("watch", function(){
 gulp.task("lint-easy", function(){
   return gulp.src("src/*.js")
     .pipe(eslint())
-    .pipe(eslint.format());    
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());    
 });
 
 gulp.task("watch-test", function(){
-  return gulp.watch("spec/*.js", {ignoreInitial: false}, ["lint-easy"]);     
+  return gulp.watch("spec/*.js", {ignoreInitial: false}, ["lint-easy"]);
 });
 
 gulp.task("test-client", function(){

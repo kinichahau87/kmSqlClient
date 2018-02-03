@@ -1,11 +1,15 @@
 var __Promise = require("promise");
+var __basePoolClient = require("../src/dbManager");
 
-var KModel = function(args, __pool, tableName) {
+module.exports = (args, tableName) => {
 	"use strict";
 
 	var mThis = this;
 	var mViewName = "";
-	var mSqlKeyWords = ["=", "like", "<", ">", "not like", ">=", "<=", "<>", "!="];
+	const mSqlKeyWords = ["=", "like", "<", ">", "not like", ">=", "<=", "<>", "!="];
+	const mDefaultPoolName = "__default_pool";
+	var mConnections = [];
+	var mCurrentPoolConnectionName = null;
 
 	if (args) {
 		for (var arg in args) {
@@ -13,21 +17,31 @@ var KModel = function(args, __pool, tableName) {
 		} //end of for
 	} //end of if
 
-	if (typeof __pool === "undefined" || __pool == null) {
-		throw new Error("pool is not set", "KModel", 1);
-	}
-
 	if (tableName) {
 		mViewName = tableName;
+	} else {
+		mViewName = this.constructor.name;
 	}
 
+	mConnections[mDefaultPoolName] = __basePoolClient.initPool(mDefaultPoolName);
+	mCurrentPoolConnectionName = mDefaultPoolName;
 
-	this.find = function(aClause) {
-		return new __Promise(function(resolve, reject) {
+	this.startNewConnection = (name) => {
+		mCurrentPoolConnectionName = name;
+		mConnections[name] = __basePoolClient.init(name);
+	};
+
+	this.startNewConnectionPool = (name) => {
+		mCurrentPoolConnectionName = name;
+		mConnections[name] = __basePoolClient.initPool(name);
+	};
+
+	this.find = (aClause) => {
+		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
 
 			var sql = prepareQuery(aClause, propertiesValues.properties);
-			__pool.query(sql.sql, sql.values, function(err, results) {
+			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
 				}
@@ -36,11 +50,11 @@ var KModel = function(args, __pool, tableName) {
 		}); //end of promise
 	}; //end of find
 
-	this.create = function() {
-		return new __Promise(function(resolve, reject) {
+	this.create = () => {
+		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
 			var sql = prepareInsert(null, propertiesValues.properties, propertiesValues.values);
-			__pool.query(sql.sql, sql.values, function(err, results) {
+			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
 				}
@@ -49,11 +63,11 @@ var KModel = function(args, __pool, tableName) {
 		}); //end of promise
 	}; //end of create
 
-	this.update = function(aClause) {
-		return new __Promise(function(resolve, reject) {
+	this.update = (aClause) => {
+		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
 			var sql = prepareUpdate(aClause, propertiesValues.properties, propertiesValues.values);
-			__pool.query(sql.sql, sql.values, function(err, results) {
+			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
 				}
@@ -62,10 +76,10 @@ var KModel = function(args, __pool, tableName) {
 		}); //end of promise
 	}; //end of update
 
-	this.del = function(aClause) {
-		return new __Promise(function(resolve, reject) {
+	this.del = (aClause) => {
+		return new __Promise((resolve, reject) => {
 			var sql = prepareDelete(aClause);
-			__pool.query(sql.sql, sql.values, function(err, results) {
+			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
 				}
@@ -74,11 +88,11 @@ var KModel = function(args, __pool, tableName) {
 		}); //end of promise
 	}; //end of del
 
-	this.callp = function() {
-		return new __Promise(function(resolve, reject) {
+	this.callp = () => {
+		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
 			var sql = prepareCall(propertiesValues.properties, propertiesValues.values);
-			__pool.query(sql.sql, sql.values, function(err, results) {
+			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
 				}
@@ -221,5 +235,3 @@ var KModel = function(args, __pool, tableName) {
 
 	return this;
 };
-
-module.exports.KModel = KModel;
