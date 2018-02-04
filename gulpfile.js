@@ -1,7 +1,6 @@
 var gulp = require("gulp");
 var watch = require("gulp-watch");
 var jasmine = require("gulp-jasmine");
-var jasmineReporters = require("jasmine-reporters");
 var beautify = require("gulp-beautify");
 var eslint = require('gulp-eslint');
 const JasmineConsoleReporter = require('jasmine-console-reporter');
