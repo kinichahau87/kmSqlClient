@@ -1,6 +1,6 @@
 var __mysql = require("mysql");
 
-module.exports = (aOptions) => {
+module.exports = function(aOptions) {
 	"use strict";
 
 	var mIsConnected = false;
@@ -31,18 +31,23 @@ module.exports = (aOptions) => {
 		}
 	}; //end of function
 
-	this.createNewConnection = (aHost, aUser, aPassword, aDatabase, aCallback) =>{
+	this.createNewConnection = (aHost, aUser, aPassword, aDatabase, aCallback) => {
 		try {
-			mNewConnection = __mysql.createConnection({host: aHost, user: aUser, password: aPassword, database: aDatabase});
+			mNewConnection = __mysql.createConnection({
+				host: aHost,
+				user: aUser,
+				password: aPassword,
+				database: aDatabase
+			});
 			return aCallback(true);
-		} catch (e){
+		} catch (e) {
 			mNewConnection = null;
 			return aCallback(false, e);
 		}
 	};
 
-	this.query = (aQuery, aValues, aCallback) =>{
-		if (mNewConnection != null){
+	this.query = (aQuery, aValues, aCallback) => {
+		if (mNewConnection != null) {
 			mNewConnection.connect();
 			mNewConnection.query(aQuery, aValues, (err, results) => {
 				mNewConnection.end();
@@ -70,7 +75,7 @@ module.exports = (aOptions) => {
 
 	function proccessResults(results) {
 		var mResults = [];
-		if (results.OkPacket) {
+		if (results.constructor.name == 'OkPacket') {
 			mResults.push(results);
 			return mResults;
 		}
@@ -90,8 +95,9 @@ module.exports = (aOptions) => {
 
 
 	this.shutdown = (aCallback) => {
-		if (mPool != null){
+		if (mPool != null) {
 			mPool.end((err) => {
+				mIsConnected = false;
 				if (aCallback) {
 					return aCallback(err);
 				} else {

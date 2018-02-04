@@ -1,26 +1,36 @@
 var __Promise = require("promise");
 var __basePoolClient = require("../src/dbManager");
 
-module.exports = (args, tableName) => {
+
+module.exports = function(args, tableName) {
 	"use strict";
 
-	var mThis = this;
+	var mThis = null;
 	var mViewName = "";
 	const mSqlKeyWords = ["=", "like", "<", ">", "not like", ">=", "<=", "<>", "!="];
 	const mDefaultPoolName = "__default_pool";
 	var mConnections = [];
 	var mCurrentPoolConnectionName = null;
 
+
 	if (args) {
-		for (var arg in args) {
-			this[arg] = args[arg];
-		} //end of for
+		if (args.constructor.name == 'Object'){
+			for (var arg in args) {
+				this[arg] = args[arg];
+			} //end of for
+		} else {
+			let funcArgs = new args();
+			for (var arg in funcArgs) {
+				this[arg] = funcArgs[arg];
+			} //end of for
+			mViewName = funcArgs.constructor.name;
+		}
 	} //end of if
+
+	mThis = this;
 
 	if (tableName) {
 		mViewName = tableName;
-	} else {
-		mViewName = this.constructor.name;
 	}
 
 	mConnections[mDefaultPoolName] = __basePoolClient.initPool(mDefaultPoolName);
@@ -39,7 +49,6 @@ module.exports = (args, tableName) => {
 	this.find = (aClause) => {
 		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
-
 			var sql = prepareQuery(aClause, propertiesValues.properties);
 			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
@@ -232,6 +241,14 @@ module.exports = (args, tableName) => {
 			throw new Error("table name not set. To set table name call setViewName('aTableName')");
 		}
 	}
+
+	this.shutdown = function(callback) {
+		for (var key in mConnections) {
+			if (mConnections.hasOwnProperty(key)) {
+				mConnections[key].shutdown(callback);
+			}
+		}
+	};
 
 	return this;
 };

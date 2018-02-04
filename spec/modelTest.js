@@ -1,7 +1,7 @@
 var __kmModel = require("../src/kmModel");
 var trigTest = require("./models/trigtest");
 
-var executions = 0;
+
 describe("A model extension", function() {
 	beforeEach(function(done) {
 		setTimeout(function() {
@@ -29,7 +29,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -53,7 +53,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -81,7 +81,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -106,7 +106,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -134,7 +134,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -162,7 +162,7 @@ describe("A model extension", function() {
 			expect(results[0].ID).not.toBeUndefined();
 
 			expect(results[0].CLIENT_NAME).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -178,7 +178,7 @@ describe("A model extension", function() {
 		findPromise.then(results => {
 
 			expect(results).not.toBe(null);
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -200,7 +200,7 @@ describe("A model extension", function() {
 		findPromise.then(results => {
 
 			expect(results).not.toBe(null);
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -220,7 +220,7 @@ describe("A model extension", function() {
 		findPromise.then(results => {
 
 			expect(results).not.toBe(null);
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -230,7 +230,7 @@ describe("A model extension", function() {
 
 	it("should do call", function(done) {
 		var model = new __kmModel({
-			"aint": 1
+			"con": 1
 		}, "p");
 
 		var findPromise = model.callp();
@@ -238,8 +238,6 @@ describe("A model extension", function() {
 
 			expect(results).not.toBe(null);
 
-			expect(results[0]["VERSION()"]).not.toBeUndefined();
-			executions++;
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -248,7 +246,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should do call 2", function(done) {
-		var model = new __kmModel({}, __poolClient, "p2");
+		var model = new __kmModel({}, "p2");
 
 		var findPromise = model.callp();
 		findPromise.then(results => {
@@ -260,7 +258,7 @@ describe("A model extension", function() {
 			expect(results[0].id).not.toBeUndefined();
 
 			expect(results[0].client_name).not.toBeUndefined();
-			executions++;
+
 			done();
 		}).catch(reason => {
 			fail(reason);
@@ -269,7 +267,7 @@ describe("A model extension", function() {
 	}); //end of it
 
 	it("should not have empty table name", function(done) {
-		var model = new __kmModel(trigTest);
+		var model = new __kmModel();
 
 		var findPromise = model.find();
 
@@ -279,30 +277,13 @@ describe("A model extension", function() {
 			fail("should throw exception");
 			done();
 		}).catch(reason => {
-			executions++;
 
 			expect(reason).not.toBe(null);
 			done();
 		});
 	});
 
-	// it("should have conneciton pool set", function(done) {
-	// 	try {
-	// 		var model = new __kmModel({
-	// 			"id": 0,
-	// 			"message": "hello from test",
-	// 			"client_name": "jasmine test"
-	// 		});
-	// 		fail("should throw exception with: " + model);
-	// 	} catch (error) {
-	// 		executions++;
-  //
-	// 		expect(error).not.toBe(null);
-	// 		done();
-	// 	}
-  //
-	// });
-
+	
 	it("should not execute invalid clause", function(done) {
 		var model = new __kmModel(trigTest);
 
@@ -316,7 +297,7 @@ describe("A model extension", function() {
 			fail("should throw exception: " + results);
 			done();
 		}).catch(reason => {
-			executions++;
+
 
 			expect(reason).not.toBe(null);
 			done();
@@ -325,17 +306,19 @@ describe("A model extension", function() {
 
 	afterEach(function(done) {
 		setTimeout(function() {
-			if (executions == 13) {
-				__poolClient.shutdown(function(err) {
-					if (err) {
-						//error
-					}
-					done();
-				});
-			} else {
-				done();
-			}
+			done();
 		}, 10);
 	}); //end of aftereach
+
+	afterAll(function(done) {
+
+		let model = new __kmModel();
+		model.shutdown((err) => {
+			if (err)
+				throw err;
+
+			done();
+		});
+	});
 
 });

@@ -3,11 +3,14 @@ var __config = require("config");
 
 module.exports = {
 	initPool: function(name) {
+		if (module.exports[name]){
+			return module.exports[name];
+		}
 		var options = {};
 		if (__config.has("db.Config.connectionLimit")) {
 			options.connectionLimit = __config.get("dbConfig.connectionLimit");
 		}
-		var __clientdb = __client(options);
+		var __clientdb = new __client(options);
 		__clientdb.createConnection(
 			__config.get("dbConfig.host"),
 			__config.get("dbConfig.user"),
@@ -23,11 +26,14 @@ module.exports = {
 		return module.exports[name];
 	},
 	init: function(name) {
+		if (module.exports[name]){
+			return module.exports[name];
+		}
 		var options = {};
 		if (__config.has("db.Config.connectionLimit")) {
 			options.connectionLimit = __config.get("dbConfig.connectionLimit");
 		}
-		var __clientdb = __client(options);
+		var __clientdb = new __client(options);
 		__clientdb.createNewConnection(
 			__config.get("dbConfig.host"),
 			__config.get("dbConfig.user"),
