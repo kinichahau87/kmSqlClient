@@ -1,10 +1,10 @@
 {
     "env": {
         "browser": true,
-        "commonjs": true,
+        "commonjs": false,
         "es6": true,
         "node": true,
-		"jasmine": true
+		    "jasmine": true
     },
 	"plugins": ["jasmine"],
     "extends": ["eslint:recommended", "plugin:jasmine/recommended"],

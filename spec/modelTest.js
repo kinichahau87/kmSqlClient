@@ -2,6 +2,7 @@ var __kmModel = require("../src/kmModel");
 var trigTest = require("./models/trigtest");
 
 
+
 describe("A model extension", function() {
 	beforeEach(function(done) {
 		setTimeout(function() {
@@ -17,18 +18,18 @@ describe("A model extension", function() {
 			"client_name": ""
 		});
 
-		model.setViewName("trigtest");
+		model.setViewName("TRIGTEST");
 		model.message = "hello world";
 		var promisefind = model.find();
-		promisefind.then(results => {
+		promisefind.then(results => {		
 
 			expect(results).not.toBe(null);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -48,11 +49,37 @@ describe("A model extension", function() {
 
 			expect(results).not.toBe(null);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
+
+			done();
+		}).catch(reason => {
+			fail(reason);
+		});
+
+	}); //end of it
+
+	it("should do where clause with extending a model", function(done) {
+
+		var model = new __kmModel(trigTest);
+
+		var findPromise = model.find({
+			"message": {
+				"=": "command to test insert"
+			}
+		});
+		findPromise.then(results => {
+
+			expect(results).not.toBe(null);
+
+			expect(results[0].message).not.toBeUndefined();
+
+			expect(results[0].id).not.toBeUndefined();
+
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -73,14 +100,13 @@ describe("A model extension", function() {
 			}
 		});
 		findPromise.then(results => {
-
 			expect(results).not.toBe(true);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -101,11 +127,11 @@ describe("A model extension", function() {
 
 			expect(results).not.toBe(null);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -129,11 +155,11 @@ describe("A model extension", function() {
 
 			expect(results).not.toBe(null);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -157,11 +183,11 @@ describe("A model extension", function() {
 
 			expect(results).not.toBe(null);
 
-			expect(results[0].MESSAGE).not.toBeUndefined();
+			expect(results[0].message).not.toBeUndefined();
 
-			expect(results[0].ID).not.toBeUndefined();
+			expect(results[0].id).not.toBeUndefined();
 
-			expect(results[0].CLIENT_NAME).not.toBeUndefined();
+			expect(results[0].client_name).not.toBeUndefined();
 
 			done();
 		}).catch(reason => {
@@ -283,7 +309,7 @@ describe("A model extension", function() {
 		});
 	});
 
-	
+
 	it("should not execute invalid clause", function(done) {
 		var model = new __kmModel(trigTest);
 

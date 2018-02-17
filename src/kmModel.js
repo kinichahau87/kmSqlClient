@@ -49,7 +49,7 @@ module.exports = function(args, tableName) {
 	this.find = (aClause) => {
 		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
-			var sql = prepareQuery(aClause, propertiesValues.properties);
+			var sql = prepareQuery(aClause, propertiesValues.properties);			
 			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);
@@ -208,7 +208,7 @@ module.exports = function(args, tableName) {
 		} //end of if
 
 		return {
-			"sql": sql.join(" ").toUpperCase(),
+			"sql": sql.join(" "),
 			"values": values
 		};
 	}

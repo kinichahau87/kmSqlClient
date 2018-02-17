@@ -44,7 +44,7 @@ CREATE TABLE `TRIGTEST` (
 
 LOCK TABLES `TRIGTEST` WRITE;
 /*!40000 ALTER TABLE `TRIGTEST` DISABLE KEYS */;
-INSERT INTO `TRIGTEST` VALUES (6,'hello','terminal'),(8,'16','terminal'),(9,'message from new producer','NewProcClient'),(11,'16','NewProcClient'),(15,'message to test insert','NewProcClient'),(16,'command to test insert','NewProcClient');
+INSERT INTO `TRIGTEST` VALUES (6,'hello','terminal'),(8,'16','terminal'),(9,'message from new producer','NewProcClient'),(11,'16','NewProcClient'),(15,'message to test insert','NewProcClient'),(16,'command to test insert','NewProcClient'),(17,'command to test insert','jasmine-unit-test');
 /*!40000 ALTER TABLE `TRIGTEST` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
