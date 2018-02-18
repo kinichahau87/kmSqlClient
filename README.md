@@ -1,5 +1,6 @@
+[![https://nodei.co/npm/kmmysql.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/kmmysql.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/kmmysql)
+
 # kmSqlClient
-=============================
 
 a small mysql library built on top of the node [mysql](https://github.com/mysqljs/mysql) client that helps build maintanable helpers
 
@@ -105,7 +106,7 @@ model.shutdown((err) => {
 });
 
 ```
-By default the library uses connection a pool. If you would like to manage your own connections use the startNewConnection or startNewConnectionPool functions.
+By default the library uses a connection pool. If you would like to manage your own connections use the startNewConnection or startNewConnectionPool functions.
 
 ```javascript
 
