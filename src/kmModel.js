@@ -39,17 +39,19 @@ module.exports = function(args, tableName) {
 	this.startNewConnection = (name) => {
 		mCurrentPoolConnectionName = name;
 		mConnections[name] = __basePoolClient.init(name);
+		return mConnections[name];
 	};
 
 	this.startNewConnectionPool = (name) => {
 		mCurrentPoolConnectionName = name;
 		mConnections[name] = __basePoolClient.initPool(name);
+		return mConnections[name];
 	};
 
 	this.find = (aClause) => {
 		return new __Promise((resolve, reject) => {
 			var propertiesValues = preparePropertyValues();
-			var sql = prepareQuery(aClause, propertiesValues.properties);			
+			var sql = prepareQuery(aClause, propertiesValues.properties);
 			mConnections[mCurrentPoolConnectionName].query(sql.sql, sql.values, (err, results) => {
 				if (err) {
 					reject(err);

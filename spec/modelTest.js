@@ -19,9 +19,9 @@ describe("A model extension", function() {
 		});
 
 		model.setViewName("TRIGTEST");
-		model.message = "hello world";
+		//will get all records
 		var promisefind = model.find();
-		promisefind.then(results => {		
+		promisefind.then(results => {
 
 			expect(results).not.toBe(null);
 
@@ -40,6 +40,7 @@ describe("A model extension", function() {
 	it("should do where clause", function(done) {
 		var model = new __kmModel(trigTest);
 
+		//find records where message='command to test insert'
 		var findPromise = model.find({
 			"message": {
 				"=": "command to test insert"
@@ -50,6 +51,8 @@ describe("A model extension", function() {
 			expect(results).not.toBe(null);
 
 			expect(results[0].message).not.toBeUndefined();
+
+			expect(results[0].message).toEqual("command to test insert");
 
 			expect(results[0].id).not.toBeUndefined();
 
@@ -76,6 +79,8 @@ describe("A model extension", function() {
 			expect(results).not.toBe(null);
 
 			expect(results[0].message).not.toBeUndefined();
+
+			expect(results[0].message).toEqual("command to test insert");
 
 			expect(results[0].id).not.toBeUndefined();
 
@@ -104,9 +109,13 @@ describe("A model extension", function() {
 
 			expect(results[0].message).not.toBeUndefined();
 
+			expect(results[0].message).toEqual("command to test insert");
+
 			expect(results[0].id).not.toBeUndefined();
 
 			expect(results[0].client_name).not.toBeUndefined();
+
+			expect(results[0].client_name).toEqual("jasmine-unit-test");
 
 			done();
 		}).catch(reason => {
@@ -128,6 +137,8 @@ describe("A model extension", function() {
 			expect(results).not.toBe(null);
 
 			expect(results[0].message).not.toBeUndefined();
+
+			expect(results[0].message).toEqual("command to test insert");
 
 			expect(results[0].id).not.toBeUndefined();
 
@@ -157,9 +168,13 @@ describe("A model extension", function() {
 
 			expect(results[0].message).not.toBeUndefined();
 
+			expect(results[0].message).toEqual("command to test insert");
+
 			expect(results[0].id).not.toBeUndefined();
 
 			expect(results[0].client_name).not.toBeUndefined();
+
+			expect(results[0].client_name).toEqual("jasmine-unit-test");
 
 			done();
 		}).catch(reason => {
@@ -184,6 +199,8 @@ describe("A model extension", function() {
 			expect(results).not.toBe(null);
 
 			expect(results[0].message).not.toBeUndefined();
+
+			expect(results[0].message).toEqual("command to test insert");
 
 			expect(results[0].id).not.toBeUndefined();
 
